@@ -1,0 +1,34 @@
+// import { ApiError } from "../utils/ApiError.js";
+
+// const validate = (schema) => (req, res, next) => {
+//   const { error } = schema.validate(req.body, {
+//     abortEarly: false,
+//     stripUnknown: true,
+//   });
+
+//   if (!error) return next();
+
+//   const errors = error.details.map((detail) => ({
+//     field: detail.path.join("."),
+//     message: detail.message.replace(/['"]/g, ""),
+//     // const errors = error.details.map((d) => d.message);
+//     // throw ApiError.badRequest("Validation failed.", errors);
+//   }));
+// console.log(errors);
+
+//   return next(ApiError.badRequest("Validation failed", errors));
+// };
+
+// export default validate;
+
+
+import { ApiError } from "../utils/ApiError.js";
+
+export const validate = (schema) => (req, res, next) => {
+  const { error } = schema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const errors = error.details.map((d) => d.message);
+    return next(ApiError.badRequest("Validation failed", errors));
+  }
+  next();
+};
