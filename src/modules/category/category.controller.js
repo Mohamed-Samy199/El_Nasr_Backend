@@ -2,7 +2,7 @@ import asyncHandler from "../../utils/asyncHandler.js";
 import { ApiResponse } from "../../utils/ApiResponse.js";
 import * as categoryService from "./category.service.js";
 
-export const createCategory = asyncHandler(async (req, res) => {
+export const createCategory = asyncHandler(async (req, res) => {  
   const category = await categoryService.createCategory(req.body);
   res.status(201).json(new ApiResponse(201, { category }, "Category created successfully"));
 });

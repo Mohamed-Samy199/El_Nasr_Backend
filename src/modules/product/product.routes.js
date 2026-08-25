@@ -12,9 +12,12 @@ router.get("/", controller.getProducts);
 router.get("/:slug", controller.getProductBySlug);
 
 // محمي - لوحة التحكم
+router.get("/id/:id", verifyToken, isEditor, controller.getProductById);
 router.post("/", verifyToken, isEditor, validate(createProductSchema), controller.createProduct);
 router.put("/:id", verifyToken, isEditor, validate(updateProductSchema), controller.updateProduct);
-router.delete("/:id", verifyToken, isEditor, controller.deleteProduct);
 router.patch("/:id/images", verifyToken, isEditor, controller.attachImages);
+router.delete("/:id/images/:public_id", verifyToken, isEditor, controller.removeImage);
+router.delete("/:id", verifyToken, isEditor, controller.deleteProduct);
+
 
 export default router;

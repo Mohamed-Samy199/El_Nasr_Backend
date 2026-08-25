@@ -50,3 +50,29 @@ export const attachImages = async (id, images) => {
   if (!product) throw ApiError.notFound("Product not found");
   return product;
 };
+
+export const getProductById = async (id) => {
+  const product = await findById({
+    model: Product,
+    id,
+    options: { populate: "category", lean: true },
+  });
+  if (!product) throw ApiError.notFound("Product not found");
+  return product;
+};
+
+
+export const removeImage = async (productId, publicId) => {
+  const product = await Product.findById(productId);
+  if (!product) throw ApiError.notFound("Product not found");
+
+  const imageExists = product.images.some((img) => img.public_id === publicId);
+  if (!imageExists) throw ApiError.notFound("Image not found on this product");
+
+  await deleteCloudinaryImage(publicId);
+
+  product.images = product.images.filter((img) => img.public_id !== publicId);
+  await product.save();
+
+  return product;
+};

@@ -17,12 +17,13 @@ export const registerUser = async ({ name, email, password, role }) => {
 
 export const loginUser = async ({ email, password }) => {
   const user = await findOne({ model: User, filter: { email }, select: "+password" });
+  
   if (!user) throw ApiError.unauthorized("Invalid email or password");
   if (!user.isActive) throw ApiError.forbidden("Account is disabled");
-
+  
   const isMatch = await user.comparePassword(password);
   if (!isMatch) throw ApiError.unauthorized("Invalid email or password");
-
+  
   const token = generateToken({ id: user._id, role: user.role });
   return { user, token };
 };

@@ -7,11 +7,14 @@ const categorySchema = new mongoose.Schema(
     slug: { type: String, required: true, unique: true, lowercase: true },
     description_en: { type: String, trim: true },
     description_ar: { type: String, trim: true },
+    image: {
+      url: { type: String },
+      public_id: { type: String },
+    },
     isActive: { type: Boolean, default: true },
   },
   { timestamps: true, versionKey: "__v" }
 );
-
 
 const Category = mongoose.model("Category", categorySchema);
 export default Category;

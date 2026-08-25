@@ -32,3 +32,13 @@ export const attachImages = asyncHandler(async (req, res) => {
   const product = await productService.attachImages(req.params.id, req.body.images);
   res.status(200).json(new ApiResponse(200, { product }, "Images attached successfully"));
 });
+
+export const getProductById = asyncHandler(async (req, res) => {
+  const product = await productService.getProductById(req.params.id);
+  res.status(200).json(new ApiResponse(200, { product }, "Product fetched successfully"));
+});
+
+export const removeImage = asyncHandler(async (req, res) => {
+  const product = await productService.removeImage(req.params.id, req.params.public_id);
+  res.status(200).json(new ApiResponse(200, { product }, "Image removed successfully"));
+});
