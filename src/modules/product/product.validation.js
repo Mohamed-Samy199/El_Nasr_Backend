@@ -2,6 +2,11 @@ import Joi from "joi";
 
 const objectId = Joi.string().hex().length(24);
 
+const imageSchema = Joi.object({
+  url: Joi.string().uri().required(),
+  public_id: Joi.string().required(),
+});
+
 export const createProductSchema = Joi.object({
   name_en: Joi.string().min(2).max(100).required(),
   name_ar: Joi.string().min(2).max(100).required(),
@@ -18,6 +23,7 @@ export const createProductSchema = Joi.object({
   packaging_ar: Joi.string().max(200).allow(""),
   minOrderQty: Joi.string().max(50).allow(""),
   status: Joi.string().valid("draft", "in_review", "published"),
+  images: Joi.array().items(imageSchema).optional(),
 });
 
 export const updateProductSchema = createProductSchema.fork(

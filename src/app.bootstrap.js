@@ -54,6 +54,7 @@ const sanitizeObject = (obj) => {
 const ALLOWED_ORIGINS = [
   process.env.CLIENT_URL, // مثال: http://192.168.1.10:5173 على الشبكة الداخلية
   "http://localhost:5173",
+  "http://localhost:4173",
   "http://localhost:3000",
 ].filter(Boolean);
 

@@ -1,34 +1,21 @@
-// import { ApiError } from "../utils/ApiError.js";
-
-// const validate = (schema) => (req, res, next) => {
-//   const { error } = schema.validate(req.body, {
-//     abortEarly: false,
-//     stripUnknown: true,
-//   });
-
-//   if (!error) return next();
-
-//   const errors = error.details.map((detail) => ({
-//     field: detail.path.join("."),
-//     message: detail.message.replace(/['"]/g, ""),
-//     // const errors = error.details.map((d) => d.message);
-//     // throw ApiError.badRequest("Validation failed.", errors);
-//   }));
-// console.log(errors);
-
-//   return next(ApiError.badRequest("Validation failed", errors));
-// };
-
-// export default validate;
-
-
 import { ApiError } from "../utils/ApiError.js";
 
 export const validate = (schema) => (req, res, next) => {
-  const { error } = schema.validate(req.body, { abortEarly: false });
+  const { error, value } = schema.validate(req.body, {
+    abortEarly: false,
+    // بيشيل أي حقل زيادة مش معرّف في الـ Joi schema بدل ما يرفض الطلب كله —
+    // ده اللي كان بيسبب الـ 400 لما الفرونت كان بيبعت الـ document كامل
+    // (زي _id, slug, images, createdBy, __v) مع أي تحديث
+    stripUnknown: true,
+  });
+
   if (error) {
     const errors = error.details.map((d) => d.message);
     return next(ApiError.badRequest("Validation failed", errors));
   }
+
+  // نستبدل الـ body بالنسخة النضيفة بعد الفلترة — أي كود بعدها هيشتغل
+  // على البيانات الصح بس
+  req.body = value;
   next();
 };
