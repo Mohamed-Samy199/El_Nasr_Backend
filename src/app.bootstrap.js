@@ -53,7 +53,7 @@ const sanitizeObject = (obj) => {
 // ── CORS ──────────────────────────────────────────────────────────────────────
 const ALLOWED_ORIGINS = [
   process.env.CLIENT_URL, // مثال: http://192.168.1.10:5173 على الشبكة الداخلية
-  "https://el-nasr.vercel.app/",
+  "https://el-nasr.vercel.app",
   "http://localhost:5173",
   "http://localhost:4173",
   "http://localhost:3000",
